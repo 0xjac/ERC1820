@@ -44,7 +44,7 @@ describe('ERC1820 Test', function() {
     it('should deploy ERC1820', async () => {
         erc1820Registry = await ERC1820.deploy(web3, accounts[0]);
         assert.ok(erc1820Registry.options.address);
-        assert.equal(erc1820Registry.options.address, "0x38b2d37C6F83666Ae12CB6510abb51b54bCD1531");
+        assert.equal(erc1820Registry.options.address, "0x1820b744B33945482C17Dc37218C01D858EBc714");
     });
 
     it('should deploy the example implementer', async () => {

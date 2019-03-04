@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning][semver].
 ### Changed
 - Use circleci instead of travis for ci
 - Test code cleanup
+- Vanity address
 
 ### Fixed
 - N/A
