@@ -1,9 +1,9 @@
 pragma solidity ^0.5.3;
 
-import "./ERC820aClient.sol";
+import "./ERC1820Client.sol";
 
 
-contract ExampleClient is ERC820aClient {
+contract ExampleClient is ERC1820Client {
 
     address private owner;
 

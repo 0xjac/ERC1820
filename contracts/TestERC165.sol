@@ -64,8 +64,8 @@ contract Lisa is ERC165MappingImplementation, Simpson {
         supportedInterfaces[this.is2D.selector ^ this.skinColor.selector] = true;
     }
 
-    function is2D() external returns (bool) {}
-    function skinColor() external returns (string memory) {}
+    function is2D() external returns (bool) {} // solium-disable-line no-empty-blocks
+    function skinColor() external returns (string memory) {} // solium-disable-line no-empty-blocks
 }
 
 
@@ -76,6 +76,6 @@ contract Homer is ERC165, Simpson {
             interfaceID == this.is2D.selector ^ this.skinColor.selector; // Simpson
     }
 
-    function is2D() external returns (bool) {}
-    function skinColor() external returns (string memory) {}
+    function is2D() external returns (bool) {} // solium-disable-line no-empty-blocks
+    function skinColor() external returns (string memory) {} // solium-disable-line no-empty-blocks
 }

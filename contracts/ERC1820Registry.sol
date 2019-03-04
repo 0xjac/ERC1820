@@ -1,4 +1,4 @@
-/* ERC820a Pseudo-introspection Registry Contract
+/* ERC1820 Pseudo-introspection Registry Contract
  * This standard defines a universal registry smart contract where any address (contract or regular account) can
  * register which interface it supports and which smart contract is responsible for its implementation.
  *
@@ -10,12 +10,12 @@
  * You should have received a copy of the CC0 Public Domain Dedication along with this software. If not, see
  * <http://creativecommons.org/publicdomain/zero/1.0/>.
  *
- *    ███████╗██████╗  ██████╗ █████╗ ██████╗  ██████╗
- *    ██╔════╝██╔══██╗██╔════╝██╔══██╗╚════██╗██╔═████╗ ██████
- *    █████╗  ██████╔╝██║     ╚█████╔╝ █████╔╝██║██╔██║      ██
- *    ██╔══╝  ██╔══██╗██║     ██╔══██╗██╔═══╝ ████╔╝██║ ███████
- *    ███████╗██║  ██║╚██████╗╚█████╔╝███████╗╚██████╔╝██    ██
- *    ╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚════╝ ╚══════╝ ╚═════╝  ██████
+ *    ███████╗██████╗  ██████╗ ██╗ █████╗ ██████╗  ██████╗
+ *    ██╔════╝██╔══██╗██╔════╝███║██╔══██╗╚════██╗██╔═████╗
+ *    █████╗  ██████╔╝██║     ╚██║╚█████╔╝ █████╔╝██║██╔██║
+ *    ██╔══╝  ██╔══██╗██║      ██║██╔══██╗██╔═══╝ ████╔╝██║
+ *    ███████╗██║  ██║╚██████╗ ██║╚█████╔╝███████╗╚██████╔╝
+ *    ╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝ ╚════╝ ╚══════╝ ╚═════╝
  *
  *    ██████╗ ███████╗ ██████╗ ██╗███████╗████████╗██████╗ ██╗   ██╗
  *    ██╔══██╗██╔════╝██╔════╝ ██║██╔════╝╚══██╔══╝██╔══██╗╚██╗ ██╔╝
@@ -26,31 +26,31 @@
  *
  */
 pragma solidity 0.5.3;
-// IV is value needed to have a vanity address starting with `0x820a`.
+// IV is value needed to have a vanity address starting with `0x1820`.
 // IV: 42393
 
 /// @dev The interface a contract MUST implement if it is the implementer of
 /// some (other) interface for any address other than itself.
-interface ERC820aImplementerInterface {
+interface ERC1820ImplementerInterface {
     /// @notice Indicates whether the contract implements the interface `interfaceHash` for the address `addr` or not.
     /// @param interfaceHash keccak256 hash of the name of the interface
     /// @param addr Address for which the contract will implement the interface
-    /// @return ERC820A_ACCEPT_MAGIC only if the contract implements `interfaceHash` for the address `addr`.
+    /// @return ERC1820_ACCEPT_MAGIC only if the contract implements `interfaceHash` for the address `addr`.
     function canImplementInterfaceForAddress(bytes32 interfaceHash, address addr) external view returns(bytes32);
 }
 
 
-/// @title ERC820a Pseudo-introspection Registry Contract
+/// @title ERC1820 Pseudo-introspection Registry Contract
 /// @author Jordi Baylina and Jacques Dafflon
-/// @notice This contract is the official implementation of the ERC820a Registry.
-/// @notice For more details, see https://eips.ethereum.org/EIPS/eip-820a
-contract ERC820aRegistry {
+/// @notice This contract is the official implementation of the ERC1820 Registry.
+/// @notice For more details, see https://eips.ethereum.org/EIPS/eip-1820
+contract ERC1820Registry {
     /// @notice ERC165 Invalid ID.
     bytes4 constant internal INVALID_ID = 0xffffffff;
     /// @notice Method ID for the ERC165 supportsInterface method (= `bytes4(keccak256('supportsInterface(bytes4)'))`).
     bytes4 constant internal ERC165ID = 0x01ffc9a7;
     /// @notice Magic value which is returned if a contract implements an interface on behalf of some other address.
-    bytes32 constant internal ERC820A_ACCEPT_MAGIC = keccak256(abi.encodePacked("ERC820A_ACCEPT_MAGIC"));
+    bytes32 constant internal ERC1820_ACCEPT_MAGIC = keccak256(abi.encodePacked("ERC1820_ACCEPT_MAGIC"));
 
     /// @notice mapping from addresses and interface hashes to their implementers.
     mapping(address => mapping(bytes32 => address)) internal interfaces;
@@ -92,11 +92,11 @@ contract ERC820aRegistry {
         address addr = _addr == address(0) ? msg.sender : _addr;
         require(getManager(addr) == msg.sender, "Not the manager");
 
-        require(!isERC165Interface(_interfaceHash), "Must not be a ERC165 hash");
+        require(!isERC165Interface(_interfaceHash), "Must not be an ERC165 hash");
         if (_implementer != address(0) && _implementer != msg.sender) {
             require(
-                ERC820aImplementerInterface(_implementer)
-                    .canImplementInterfaceForAddress(_interfaceHash, addr) == ERC820A_ACCEPT_MAGIC,
+                ERC1820ImplementerInterface(_implementer)
+                    .canImplementInterfaceForAddress(_interfaceHash, addr) == ERC1820_ACCEPT_MAGIC,
                 "Does not implement the interface"
             );
         }

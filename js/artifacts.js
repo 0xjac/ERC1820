@@ -24,15 +24,16 @@ module.exports = function loadArtifacts(jsonPath = DEFAULT_ARTIFACTS_PATH) {
       if (!options.from) {
         options.from = (await web3.eth.getAccounts())[0];
       }
-      let contract = new web3.eth.Contract(last[contractName].abi, {from: options.from });
-      const gas = await contract.deploy({ data: last[contractName].bin }).estimateGas({from: options.from});
+
+      let contract = new web3.eth.Contract(last[contractName].abi, { from: '' + options.from });
+      const gas = await contract.deploy({ data: last[contractName].bin }).estimateGas({ from: options.from });
       if (!options.gas) {
         options.gas = gas;
       } else if (options.gas < gas) {
         console.warn(`Specified gas amount ${options.gas} is lower than the estimated ${gas}.`);
       }
       return await contract.deploy({ arguments: options.arguments, data: last[contractName].bin })
-        .send({from: options.from, gas: options.gas, gasLimit: options.gasLimit});
+        .send({ from: options.from, gas: options.gas, gasLimit: options.gasLimit });
     };
 
     last[contractName]
@@ -40,4 +41,4 @@ module.exports = function loadArtifacts(jsonPath = DEFAULT_ARTIFACTS_PATH) {
   });
 
   return artifacts
-}
+};

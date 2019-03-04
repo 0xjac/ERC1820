@@ -1,7 +1,7 @@
 {
-  "name": "erc820a",
-  "version": "0.0.26",
-  "description": "ERC820a - Pseudo-introspection using a registry contract",
+  "name": "erc1820",
+  "version": "0.0.0",
+  "description": "ERC1820 - Pseudo-introspection using a registry contract",
   "main": "index.js",
   "files": [
     "artifacts",
@@ -22,7 +22,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jbaylina/ERC820a.git"
+    "url": "https://github.com/0xjac/ERC1820.git"
   },
   "keywords": [
     "solidity",
@@ -30,6 +30,7 @@
     "ERC672",
     "ERC820",
     "ERC820a",
+    "ERC1820",
     "ERC777",
     "smart",
     "contract",
@@ -39,7 +40,7 @@
   "author": "Jordi Baylina, Jacques Dafflon",
   "license": "CC0-1.0",
   "bugs": {
-    "url": "https://github.com/jbaylina/ERC820a/issues"
+    "url": "https://github.com/0xjac/ERC1820/issues"
   },
   "homepage": "https://eips.ethereum.org/EIPS/eip-820",
   "dependencies": {
@@ -50,8 +51,8 @@
   "devDependencies": {
     "chai": "4.2.0",
     "chai-as-promised": "7.1.1",
-    "ethlint": "^1.2.2",
+    "ethlint": "^1.2.3",
     "ganache-cli": "6.3.0",
-    "mocha": "5.2.0"
+    "mocha": "^5.2.0"
   }
 }

@@ -3,7 +3,7 @@ const Web3 = require('web3');
 const chai = require('chai');
 const assert = chai.assert;
 
-const ERC820a = require('../index.js');
+const ERC1820 = require('../index.js');
 const artifacts = require('../js/artifacts')();
 
 const ERC165_ID = '0x01ffc9a7';
@@ -14,7 +14,7 @@ describe('ERC165 Compatibility Test', function() {
     let testrpc;
     let web3;
     let accounts;
-    let erc820aRegistry;
+    let erc1820Registry;
     let addr;
     let manager1;
     let manager2;
@@ -42,16 +42,16 @@ describe('ERC165 Compatibility Test', function() {
 
     after(async () => testrpc.close());
 
-    it('should deploy ERC820a', async () => {
-        erc820aRegistry = await ERC820a.deploy(web3, accounts[0]);
-        assert.ok(erc820aRegistry.options.address);
-        assert.equal(erc820aRegistry.options.address, "0x820a4875aA7900995D6f4ed84ab66651dd582aef");
+    it('should deploy ERC1820', async () => {
+        erc1820Registry = await ERC1820.deploy(web3, accounts[0]);
+        assert.ok(erc1820Registry.options.address);
+        assert.equal(erc1820Registry.options.address, "0x38b2d37C6F83666Ae12CB6510abb51b54bCD1531");
     });
 
     it('should return noInterface for LegacyNoCB', async () => {
         const c = await artifacts.contracts.TestERC165.LegacyNoCB.deploy(web3);
         assert.ok(c.options.address);
-        const r = await erc820aRegistry.methods.implementsERC165InterfaceNoCache(c.options.address, ERC165_ID).call();
+        const r = await erc1820Registry.methods.implementsERC165InterfaceNoCache(c.options.address, ERC165_ID).call();
         assert.isFalse(r);
     });
 
@@ -59,21 +59,21 @@ describe('ERC165 Compatibility Test', function() {
     it('should return noInterface for LegacyCBNoReturn', async () => {
         const c = await artifacts.contracts.TestERC165.LegacyCBNoReturn.deploy(web3);
         assert.ok(c.options.address);
-        const r = await erc820aRegistry.methods.implementsERC165InterfaceNoCache(c.options.address, ERC165_ID).call();
+        const r = await erc1820Registry.methods.implementsERC165InterfaceNoCache(c.options.address, ERC165_ID).call();
         assert.isFalse(r);
     });
 
     it('should return noInterface for LegacyCBReturnTrue', async () => {
         const c = await artifacts.contracts.TestERC165.LegacyCBReturnTrue.deploy(web3);
         assert.ok(c.options.address);
-        const r = await erc820aRegistry.methods.implementsERC165InterfaceNoCache(c.options.address, ERC165_ID).call();
+        const r = await erc1820Registry.methods.implementsERC165InterfaceNoCache(c.options.address, ERC165_ID).call();
         assert.isFalse(r);
     });
 
     it('should return noInterface for LegacyCBReturnFalse', async () => {
         const c = await artifacts.contracts.TestERC165.LegacyCBReturnFalse.deploy(web3);
         assert.ok(c.options.address);
-        const r = await erc820aRegistry.methods.implementsERC165InterfaceNoCache(c.options.address, ERC165_ID).call();
+        const r = await erc1820Registry.methods.implementsERC165InterfaceNoCache(c.options.address, ERC165_ID).call();
         assert.isFalse(r);
     });
 
@@ -85,11 +85,11 @@ describe('ERC165 Compatibility Test', function() {
         assert.isTrue(await lisa.methods.supportsInterface(SIMPSON_ID).call());
 
         assert.isTrue(
-          await erc820aRegistry.methods.implementsERC165InterfaceNoCache(lisa.options.address, ERC165_ID).call());
+          await erc1820Registry.methods.implementsERC165InterfaceNoCache(lisa.options.address, ERC165_ID).call());
         assert.isFalse(
-          await erc820aRegistry.methods.implementsERC165InterfaceNoCache(lisa.options.address, INVALID_ID).call());
+          await erc1820Registry.methods.implementsERC165InterfaceNoCache(lisa.options.address, INVALID_ID).call());
         assert.isTrue(
-          await erc820aRegistry.methods.implementsERC165InterfaceNoCache(lisa.options.address, SIMPSON_ID).call());
+          await erc1820Registry.methods.implementsERC165InterfaceNoCache(lisa.options.address, SIMPSON_ID).call());
     });
 
     it('should return true on a good impl of ERC165 Homer', async () => {
@@ -99,25 +99,25 @@ describe('ERC165 Compatibility Test', function() {
         assert.isFalse(await homer.methods.supportsInterface(INVALID_ID).call());
         assert.isTrue(await homer.methods.supportsInterface(SIMPSON_ID).call());
         assert.isTrue(
-          await erc820aRegistry.methods.implementsERC165InterfaceNoCache(homer.options.address, ERC165_ID).call());
+          await erc1820Registry.methods.implementsERC165InterfaceNoCache(homer.options.address, ERC165_ID).call());
         assert.isFalse(
-          await erc820aRegistry.methods.implementsERC165InterfaceNoCache(homer.options.address, INVALID_ID).call());
+          await erc1820Registry.methods.implementsERC165InterfaceNoCache(homer.options.address, INVALID_ID).call());
         assert.isTrue(
-          await erc820aRegistry.methods.implementsERC165InterfaceNoCache(homer.options.address, SIMPSON_ID).call());
+          await erc1820Registry.methods.implementsERC165InterfaceNoCache(homer.options.address, SIMPSON_ID).call());
     });
 
-    it('should be compatible with ERC820a', async () => {
-        const gasBefore = await erc820aRegistry.methods
+    it('should be compatible with ERC1820', async () => {
+        const gasBefore = await erc1820Registry.methods
           .getInterfaceImplementer(lisa.options.address, SIMPSON_ID).estimateGas();
-        const responseBefore = await erc820aRegistry.methods
+        const responseBefore = await erc1820Registry.methods
           .getInterfaceImplementer(lisa.options.address, SIMPSON_ID).call();
         assert.equal(responseBefore, lisa.options.address);
 
-        await erc820aRegistry.methods.updateERC165Cache(lisa.options.address, SIMPSON_ID).send({from: addr});
+        await erc1820Registry.methods.updateERC165Cache(lisa.options.address, SIMPSON_ID).send({from: addr});
 
-        const gasAfter = await erc820aRegistry.methods
+        const gasAfter = await erc1820Registry.methods
           .getInterfaceImplementer(lisa.options.address, SIMPSON_ID).estimateGas();
-        const responseAfter = await erc820aRegistry.methods
+        const responseAfter = await erc1820Registry.methods
           .getInterfaceImplementer(lisa.options.address, SIMPSON_ID).call();
         assert.equal(responseAfter, lisa.options.address);
 
