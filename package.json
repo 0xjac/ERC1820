@@ -1,0 +1,57 @@
+{
+  "name": "erc820a",
+  "version": "0.0.26",
+  "description": "ERC820a - Pseudo-introspection using a registry contract",
+  "main": "index.js",
+  "files": [
+    "artifacts",
+    "js",
+    "contracts"
+  ],
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "lint:sol": "npx solium --reporter pretty --dir contracts",
+    "build:sol": "solc --overwrite --optimize --optimize-runs 200 --metadata-literal --output-dir ./artifacts --combined-json abi,asm,bin,devdoc,hashes,interface,metadata,opcodes,srcmap,userdoc ./contracts/*.sol",
+    "build": "npm run clean && npm run build:sol",
+    "test": "npm run build && mocha --harmony",
+    "clean": "rm -rf artifacts",
+    "info": "node js/info.js",
+    "prepack": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jbaylina/ERC820a.git"
+  },
+  "keywords": [
+    "solidity",
+    "pseudo-introspaection",
+    "ERC672",
+    "ERC820",
+    "ERC820a",
+    "ERC777",
+    "smart",
+    "contract",
+    "reverseENS",
+    "ethereum"
+  ],
+  "author": "Jordi Baylina, Jacques Dafflon",
+  "license": "CC0-1.0",
+  "bugs": {
+    "url": "https://github.com/jbaylina/ERC820a/issues"
+  },
+  "homepage": "https://eips.ethereum.org/EIPS/eip-820",
+  "dependencies": {
+    "ethereumjs-tx": "1.3.7",
+    "ethereumjs-util": "6.1.0",
+    "web3": "1.0.0-beta.34"
+  },
+  "devDependencies": {
+    "chai": "4.2.0",
+    "chai-as-promised": "7.1.1",
+    "ethlint": "^1.2.2",
+    "ganache-cli": "6.3.0",
+    "mocha": "5.2.0"
+  }
+}
