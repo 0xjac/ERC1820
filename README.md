@@ -1,5 +1,5 @@
 # ERC1820 Pseudo-introspection Registry Contract
-[![Build Status](https://img.shields.io/travis/0xjac/ERC1820/master.svg?style=flat-square&maxAge=3600 )](https://travis-ci.org/0xjac/ERC1820)
+[![Build Status](https://img.shields.io/circleci/project/github/0xjac/ERC1820/master.svg?style=flat-square&maxAge=3600)](https://circleci.com/gh/0xjac/ERC1820)
 [![License](https://img.shields.io/npm/l/erc1820.svg?style=flat-square&maxAge=3600)](https://github.com/0xjac/ERC1820/blob/master/LICENSE)
 [![npm version](https://img.shields.io/npm/v/erc1820.svg?style=flat-square&maxAge=3600)](https://www.npmjs.com/package/erc1820)
 [![npm downloads](https://img.shields.io/npm/dt/erc1820.svg?style=flat-square&maxAge=3600)](https://www.npmjs.com/package/erc1820)

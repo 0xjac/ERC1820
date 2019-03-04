@@ -1,8 +1,0 @@
-language: 'node_js'
-before_install:
- - wget "https://github.com/ethereum/solidity/releases/download/v0.5.3/solc-static-linux"
- - chmod +x ./solc-static-linux
- - sudo mv solc-static-linux /usr/bin/solc
-
-node_js:
- - '11'
