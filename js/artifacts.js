@@ -25,7 +25,7 @@ module.exports = function loadArtifacts(jsonPath = DEFAULT_ARTIFACTS_PATH) {
         options.from = (await web3.eth.getAccounts())[0];
       }
 
-      let contract = new web3.eth.Contract(last[contractName].abi, { from: '' + options.from });
+      let contract = new web3.eth.Contract(last[contractName].abi, null, { from: options.from });
       const gas = await contract.deploy({ data: last[contractName].bin }).estimateGas({ from: options.from });
       if (!options.gas) {
         options.gas = gas;

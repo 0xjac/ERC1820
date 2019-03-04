@@ -113,7 +113,7 @@ describe('ERC165 Compatibility Test', function() {
           .getInterfaceImplementer(lisa.options.address, SIMPSON_ID).call();
         assert.equal(responseBefore, lisa.options.address);
 
-        await erc1820Registry.methods.updateERC165Cache(lisa.options.address, SIMPSON_ID).send({from: addr});
+        await erc1820Registry.methods.updateERC165Cache(lisa.options.address, SIMPSON_ID).send({ from: addr });
 
         const gasAfter = await erc1820Registry.methods
           .getInterfaceImplementer(lisa.options.address, SIMPSON_ID).estimateGas();

@@ -53,7 +53,7 @@ describe('ERC1820 Test', function() {
     });
 
     it('should deploy the example client', async () => {
-        client = await artifacts.contracts.ExampleClient.ExampleClient.deploy(web3);
+        client = await artifacts.contracts.ExampleClient.ExampleClient.deploy(web3, { from: accounts[7], gas: 300000 });
         assert.ok(client.options.address);
     });
 
@@ -61,7 +61,7 @@ describe('ERC1820 Test', function() {
         interfaceHash = await erc1820Registry.methods.interfaceHash("TestIface").call();
         assert.equal(interfaceHash, web3.utils.sha3("TestIface"));
         await erc1820Registry.methods
-          .setInterfaceImplementer(addr, interfaceHash, implementer.options.address).send({from: addr});
+          .setInterfaceImplementer(addr, interfaceHash, implementer.options.address).send({ from: addr });
         const implementerAddress = await erc1820Registry.methods.getInterfaceImplementer(addr, interfaceHash).call();
         assert.equal(implementerAddress, implementer.options.address);
     });
@@ -74,27 +74,27 @@ describe('ERC1820 Test', function() {
     //
     it('manager should remove interface', async() => {
         await (erc1820Registry.methods
-          .setInterfaceImplementer(addr, interfaceHash, ZERO_ADDRESS).send({from: manager1, gas: 200000}));
+          .setInterfaceImplementer(addr, interfaceHash, ZERO_ADDRESS).send({ from: manager1, gas: 200000 }));
         const implementerAddress = await erc1820Registry.methods.getInterfaceImplementer(addr, interfaceHash).call();
         assert.equal(implementerAddress, ZERO_ADDRESS);
     });
 
     it('address should change back the interface', async() => {
         await erc1820Registry.methods
-          .setInterfaceImplementer(addr, interfaceHash, implementer.options.address).send({from: manager1});
+          .setInterfaceImplementer(addr, interfaceHash, implementer.options.address).send({ from: manager1 });
         const implementerAddress = await erc1820Registry.methods.getInterfaceImplementer(addr, interfaceHash).call();
         assert.equal(implementerAddress, implementer.options.address);
     });
 
     it('manager should change manager', async() => {
-        await erc1820Registry.methods.setManager(addr, manager2).send({from: manager1});
+        await erc1820Registry.methods.setManager(addr, manager2).send({ from: manager1 });
         const rManager2 = await erc1820Registry.methods.getManager(addr).call();
         assert.equal(rManager2, manager2);
     });
 
     it('address should remove interface', async() => {
         await erc1820Registry.methods
-          .setInterfaceImplementer(addr, interfaceHash, ZERO_ADDRESS).send({from: manager2, gas: 200000});
+          .setInterfaceImplementer(addr, interfaceHash, ZERO_ADDRESS).send({ from: manager2, gas: 200000 });
         const implementerAddress = await erc1820Registry.methods.getInterfaceImplementer(addr, interfaceHash).call();
         assert.equal(implementerAddress, ZERO_ADDRESS);
     });
@@ -102,27 +102,27 @@ describe('ERC1820 Test', function() {
     it('should not allow to set an invalid implementer for an address', async() => {
         await erc1820Registry.methods
           .setInterfaceImplementer(addr, interfaceHash, erc1820Registry.options.address)
-          .send({from: manager2, gas: 200000})
+          .send({ from: manager2, gas: 200000 })
           .should.be.rejectedWith('revert');
     });
 
     it('manager should set back interface', async() => {
         await erc1820Registry.methods
           .setInterfaceImplementer(addr, interfaceHash, implementer.options.address)
-          .send({from: manager2, gas: 200000});
+          .send({ from: manager2, gas: 200000 });
         const implementerAddress = await erc1820Registry.methods.getInterfaceImplementer(addr, interfaceHash).call();
         assert.equal(implementerAddress, implementer.options.address);
     });
 
     it('address should remove manager', async() => {
-        await erc1820Registry.methods.setManager(addr, ZERO_ADDRESS).send({from: manager2, gas: 200000});
+        await erc1820Registry.methods.setManager(addr, ZERO_ADDRESS).send({ from: manager2, gas: 200000 });
         const managerAddress = await erc1820Registry.methods.getManager(addr).call();
         assert.equal(managerAddress, addr);
     });
 
     it('manager should not be able to change interface', async() => {
         await erc1820Registry.methods
-          .setInterfaceImplementer(addr, interfaceHash, ZERO_ADDRESS).send({from: manager2, gas: 200000})
+          .setInterfaceImplementer(addr, interfaceHash, ZERO_ADDRESS).send({ from: manager2, gas: 200000 })
           .should.be.rejectedWith('revert');
     });
 });
