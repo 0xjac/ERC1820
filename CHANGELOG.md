@@ -7,7 +7,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog][keep a changelog]
 and this project adheres to [Semantic Versioning][semver].
 
-## [Unreleased][unreleased]
+<!-- ## [Unreleased][unreleased]
+
+### Added
+- N/A
+
+### Changed
+- N/A
+
+### Fixed
+- N/A
+
+### Removed
+- N/A
+-->
+
+## [v0.0.1][]
+
 
 ### Added
 - Import from [ERC820a][erc820a]
@@ -19,13 +35,8 @@ and this project adheres to [Semantic Versioning][semver].
 - Test code cleanup
 - Vanity address
 
-### Fixed
-- N/A
-
-### Removed
-- N/A
-
-[unreleased]: https://github.com/0xjac/ERC1820/compare/3cf651829dd09e134c7c2b93480e58df2b31000d..HEAD
+[unreleased]: https://github.com/0xjac/ERC1820/compare/v0.0.1..HEAD
+[v0.0.1]: https://github.com/0xjac/ERC1820/compare/0b80d867940243d4538b8686f3c647704e9cb5c6..v0.0.1
 [erc820a]: https://github.com/jbaylina/ERC820a
 [keep a changelog]: https://keepachangelog.com/en/1.0.0/
 [semver]: https://semver.org/spec/v2.0.0.html

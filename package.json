@@ -1,6 +1,6 @@
 {
   "name": "erc1820",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "ERC1820 - Pseudo-introspection using a registry contract",
   "main": "index.js",
   "files": [
