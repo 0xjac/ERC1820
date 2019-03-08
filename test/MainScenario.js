@@ -1,16 +1,20 @@
 const TestRPC = require('ganache-cli');
-const Web3 = require('web3');
+const { WebsocketProvider } = require('web3x/providers');
+const { Address } = require('web3x/address');
+const { Eth } = require('web3x/eth');
+const { sha3 } = require('web3x/utils');
 const chai = require('chai');
 const assert = chai.assert;
 chai.use(require('chai-as-promised')).should();
 
 const ERC1820 = require('../index.js');
-const artifacts = require('../js/artifacts')();
+const { ExampleImplementer } = require('../artifacts/contracts/js/ExampleImplementer');
+const { ExampleClient } = require('../artifacts/contracts/js/ExampleClient');
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
 describe('ERC1820 Test', function() {
     let testrpc;
-    let web3;
+    let eth;
     let accounts;
     let erc1820Registry;
     let addr;
@@ -32,8 +36,8 @@ describe('ERC1820 Test', function() {
 
         testrpc.listen(8546, '127.0.0.1');
 
-        web3 = new Web3('ws://127.0.0.1:8546');
-        accounts = await web3.eth.getAccounts();
+        eth = new Eth(new WebsocketProvider('ws://127.0.0.1:8546'));
+        accounts = await eth.getAccounts();
         addr = accounts[0];
         manager1 = accounts[2];
         manager2 = accounts[3];
@@ -42,28 +46,30 @@ describe('ERC1820 Test', function() {
     after(async () => testrpc.close());
 
     it('should deploy ERC1820', async () => {
-        erc1820Registry = await ERC1820.deploy(web3, accounts[0]);
-        assert.ok(erc1820Registry.options.address);
-        assert.equal(erc1820Registry.options.address, "0x1820b744B33945482C17Dc37218C01D858EBc714");
+        erc1820Registry = await ERC1820.deploy(eth);
+        assert.ok(erc1820Registry.address);
+        assert.equal(erc1820Registry.address, "0x1820b744B33945482C17Dc37218C01D858EBc714");
     });
 
     it('should deploy the example implementer', async () => {
-        implementer = await artifacts.contracts.ExampleImplementer.ExampleImplementer.deploy(web3);
-        assert.ok(implementer.options.address);
+        implementer = new ExampleImplementer(eth);
+        await implementer.deploy().send({ from: accounts[0] });
+        assert.ok(implementer.address);
     });
 
     it('should deploy the example client', async () => {
-        client = await artifacts.contracts.ExampleClient.ExampleClient.deploy(web3, { from: accounts[7], gas: 300000 });
-        assert.ok(client.options.address);
+        client = new ExampleClient(eth);
+        await client.deploy().send({ from: accounts[7] });
+        assert.ok(client.address);
     });
 
     it('should set an address', async () => {
         interfaceHash = await erc1820Registry.methods.interfaceHash("TestIface").call();
-        assert.equal(interfaceHash, web3.utils.sha3("TestIface"));
+        assert.equal(interfaceHash, sha3("TestIface"));
         await erc1820Registry.methods
-          .setInterfaceImplementer(addr, interfaceHash, implementer.options.address).send({ from: addr });
+          .setInterfaceImplementer(addr, interfaceHash, implementer.address).send({ from: addr });
         const implementerAddress = await erc1820Registry.methods.getInterfaceImplementer(addr, interfaceHash).call();
-        assert.equal(implementerAddress, implementer.options.address);
+        assert.equal(implementerAddress, implementer.address);
     });
 
     it('should change manager', async () => {
@@ -81,9 +87,9 @@ describe('ERC1820 Test', function() {
 
     it('address should change back the interface', async() => {
         await erc1820Registry.methods
-          .setInterfaceImplementer(addr, interfaceHash, implementer.options.address).send({ from: manager1 });
+          .setInterfaceImplementer(addr, interfaceHash, implementer.address).send({ from: manager1 });
         const implementerAddress = await erc1820Registry.methods.getInterfaceImplementer(addr, interfaceHash).call();
-        assert.equal(implementerAddress, implementer.options.address);
+        assert.equal(implementerAddress, implementer.address);
     });
 
     it('manager should change manager', async() => {
@@ -101,17 +107,17 @@ describe('ERC1820 Test', function() {
 
     it('should not allow to set an invalid implementer for an address', async() => {
         await erc1820Registry.methods
-          .setInterfaceImplementer(addr, interfaceHash, erc1820Registry.options.address)
+          .setInterfaceImplementer(addr, interfaceHash, erc1820Registry.address)
           .send({ from: manager2, gas: 200000 })
           .should.be.rejectedWith('revert');
     });
 
     it('manager should set back interface', async() => {
         await erc1820Registry.methods
-          .setInterfaceImplementer(addr, interfaceHash, implementer.options.address)
+          .setInterfaceImplementer(addr, interfaceHash, implementer.address)
           .send({ from: manager2, gas: 200000 });
         const implementerAddress = await erc1820Registry.methods.getInterfaceImplementer(addr, interfaceHash).call();
-        assert.equal(implementerAddress, implementer.options.address);
+        assert.equal(implementerAddress, implementer.address);
     });
 
     it('address should remove manager', async() => {
