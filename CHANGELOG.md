@@ -22,6 +22,10 @@ and this project adheres to [Semantic Versioning][semver].
 - N/A
 -->
 
+## [v0.0.2][]
+
+- Cleanup comments in the registry
+
 ## [v0.0.1][]
 
 
@@ -35,7 +39,8 @@ and this project adheres to [Semantic Versioning][semver].
 - Test code cleanup
 - Vanity address
 
-[unreleased]: https://github.com/0xjac/ERC1820/compare/v0.0.1..HEAD
+[unreleased]: https://github.com/0xjac/ERC1820/compare/v0.0.2..HEAD
+[v0.0.2]: https://github.com/0xjac/ERC1820/compare/v0.0.1..v0.0.2
 [v0.0.1]: https://github.com/0xjac/ERC1820/compare/0b80d867940243d4538b8686f3c647704e9cb5c6..v0.0.1
 [erc820a]: https://github.com/jbaylina/ERC820a
 [keep a changelog]: https://keepachangelog.com/en/1.0.0/
